@@ -1,9 +1,13 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+const { connectToDB, disconnectFromDB, isConnected } = require('./database');
+
+
 
 app.get("/",(req, res) => {
-    res.send("Hello :)")
+    connectToDB();
+    res.send(isConnected ? "Connected" : "Disconnected")
 })
 
 app.get("/ping",(req, res) => {
@@ -11,5 +15,6 @@ app.get("/ping",(req, res) => {
 })
 
 app.listen(port, () => {
+    connectToDB();
     console.log(`Server listening on port ${port}`)
 })
