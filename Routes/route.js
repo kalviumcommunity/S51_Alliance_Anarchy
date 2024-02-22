@@ -4,7 +4,7 @@ const postRoute = express.Router();
 const putRoute = express.Router();
 const deleteRoute = express.Router();
 const Games = require("../model/AllianceAnarchy.model");
-const mongoose = require("mongoose")
+
 
 // Middleware to parse JSON request bodies
 getRoute.use(express.json());
@@ -30,7 +30,7 @@ postRoute.post("/post", async (req, res) => {
     const {id, title, description, competitiveness, friendship_ruin, genre} = req.body
     console.log(id)
     const newGame = await Games.create({id, title, description, competitiveness, friendship_ruin, genre});
-    console.log(newGame)
+    // console.log(newGame)
 
     res.status(201).json(newGame);
   } catch (err) {
@@ -54,7 +54,6 @@ putRoute.patch("/put/:id", async (req, res) => {
     res.status(400).json({ message: "Failed to update game", error: err.message });
   }
 });
-
 
 // DELETE route to delete a game by ID
 deleteRoute.delete("/delete/:id", async (req, res) => {
