@@ -1,16 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  // const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>Welcome to Full stack :)</div>
+      <div>
+        <h1>Welcome to Alliance Anarchy!</h1>
+        <p>
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Illum quod<br />
+          dicta explicabo quas, consequatur consequuntur, tempore<br />
+          necessitatibus, minus tempora nam dolores praesentium unde eveniet<br />
+          magni non culpa labore voluptas reiciendis?
+        </p>
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
