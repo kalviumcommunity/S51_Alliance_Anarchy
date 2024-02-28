@@ -1,27 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const DummyData = () => {
-  const data = {
-    id: "2",
-    title: "Mario Kart",
-    genre: "Racing",
-    description:
-      "Kart racing game with iconic Nintendo characters where players use power-ups to hinder opponents' progress",
-    difficulty: "Easy",
-    competitiveness: "High",
-    friendship_ruin:
-      "The use of random power-ups can turn the tide of the race in an instant, leading to feelings of unfairness and resentment when players are targeted or fall behind due to uncontrollable events.",
-  };
+  const [frontendData, setfrontendData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // let header = new Headers({"Access-Control-Allow-Origin": "*"})
+        const res = await fetch("http://localhost:3000/get");
+        console.log(res)
+        if (!res.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const data = await res.json();
+        console.log(data);
+        setfrontendData(data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    //   let header = new Headers({"Access-Control-Allow-Origin": "*", "Content-Type": "application/json",})
+    //   axios.get("https://s51-alliance-anarchy-1.onrender.com/get", {
+    //         mode: 'no-cors',
+    //         headers : header,
+    //       }).then((ele) => console.log("ele", ele))
+    //       .catch((err)=> console.error(err))
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
-      <div>{data.id}</div>
-      <h2>{data.title}</h2>
-      <p>{data.genre}</p>
-      <div>{data.description}</div>
-      <div>{data.difficulty}</div>
-      <div>{data.competitiveness}</div>
-      <div>{data.friendship_ruin}</div>
+      <div>
+        {frontendData.map((item) => (
+          <div key={item.id}>
+            <h2>{item.title}</h2>
+            <p>{item.genre}</p>
+            <div>{item.description}</div>
+            <div>{item.difficulty}</div>
+            <div>{item.competitiveness}</div>
+            <div>{item.friendship_ruin}</div>
+          </div>
+        ))}
+      </div>
     </>
   );
 };
