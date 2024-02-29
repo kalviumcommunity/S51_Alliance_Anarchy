@@ -1,48 +1,61 @@
 import React, { useState, useEffect } from "react";
+import "./DummyData.css"; 
+import { Link } from "react-router-dom"
 
 const DummyData = () => {
-  const [frontendData, setfrontendData] = useState([]);
+  const [frontendData, setFrontendData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // let header = new Headers({"Access-Control-Allow-Origin": "*"})
         const res = await fetch("http://localhost:3000/get");
-        console.log(res)
         if (!res.ok) {
           throw new Error("Failed to fetch data");
         }
         const data = await res.json();
-        console.log(data);
-        setfrontendData(data);
+        setFrontendData(data);
       } catch (err) {
         console.log(err.message);
       }
-    //   let header = new Headers({"Access-Control-Allow-Origin": "*", "Content-Type": "application/json",})
-    //   axios.get("https://s51-alliance-anarchy-1.onrender.com/get", {
-    //         mode: 'no-cors',
-    //         headers : header,
-    //       }).then((ele) => console.log("ele", ele))
-    //       .catch((err)=> console.error(err))
     };
     fetchData();
   }, []);
 
   return (
-    <>
-      <div>
-        {frontendData.map((item) => (
-          <div key={item.id}>
-            <h2>{item.title}</h2>
-            <p>{item.genre}</p>
-            <div>{item.description}</div>
-            <div>{item.difficulty}</div>
-            <div>{item.competitiveness}</div>
-            <div>{item.friendship_ruin}</div>
-          </div>
-        ))}
+    <div>
+      <header className="header">
+        <h1>Alliance Anarchy</h1>
+        <Link to="/addData">
+        <button className="add-games">ADD +</button>
+        </Link>
+      </header>
+      <div className="container">
+        <table className="data-table"> {/* Table element */}
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Genre</th>
+              <th>Description</th>
+              <th>Difficulty</th>
+              <th>Competitiveness</th>
+              <th>Friendship Ruin</th>
+            </tr>
+          </thead>
+          <tbody>
+            {frontendData.map((item) => (
+              <tr key={item.id}>
+                <td>{item.title}</td>
+                <td>{item.genre}</td>
+                <td>{item.description}</td>
+                <td>{item.difficulty}</td>
+                <td>{item.competitiveness}</td>
+                <td>{item.friendship_ruin}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-    </>
+    </div>
   );
 };
 
