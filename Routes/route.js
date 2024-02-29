@@ -10,7 +10,7 @@ const Games = require("../model/AllianceAnarchy.model");
 getRoute.use(express.json());
 postRoute.use(express.json());
 putRoute.use(express.json());
-deleteRoute.use(express.json());
+deleteRoute.use(express.json());   
 
 // GET route to fetch all games
 getRoute.get("/get", async (req, res) => {

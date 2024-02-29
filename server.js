@@ -2,29 +2,37 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const { connectToDB, disconnectFromDB, isConnected } = require('./database');
-const {getRoute, postRoute, putRoute, deleteRoute} = require("./Routes/route")
-const bodyParser = require("body-parser")
+const { getRoute, postRoute, putRoute, deleteRoute } = require("./Routes/route");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 
-app.use("/", getRoute)
-app.use("/", postRoute)
-app.use("/", putRoute)
-app.use("/", deleteRoute)
-app.use(bodyParser.json())
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
 
+// Routes
+app.use("/", getRoute);
+app.use("/", postRoute);
+app.use("/", putRoute);
+app.use("/", deleteRoute);
 
-app.get("/",(req, res) => {
-    connectToDB();
-    res.send(isConnected ? "Connected" : "Disconnected")
-})
+// Database connection
+connectToDB().then(() => {
+    console.log("Connected to database");
+}).catch(err => {
+    console.error("Failed to connect to database:", err);
+});
 
-app.get("/ping",(req, res) => {
-    res.send("pong")
-})
+// Routes
+app.get("/", (req, res) => {
+    res.send(isConnected ? "Connected" : "Disconnected");
+});
 
+app.get("/ping", (req, res) => {
+    res.send("pong");
+});
+
+// Start server
 app.listen(port, () => {
-    connectToDB();
-    console.log(`Server listening on port ${port}`)
-})
-
-
-  
+    console.log(`Server listening on port ${port}`);
+});

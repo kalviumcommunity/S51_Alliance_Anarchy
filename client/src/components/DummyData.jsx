@@ -1,28 +1,61 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import "./DummyData.css"; 
+import { Link } from "react-router-dom"
 
 const DummyData = () => {
-  const data = {
-    id: "2",
-    title: "Mario Kart",
-    genre: "Racing",
-    description:
-      "Kart racing game with iconic Nintendo characters where players use power-ups to hinder opponents' progress",
-    difficulty: "Easy",
-    competitiveness: "High",
-    friendship_ruin:
-      "The use of random power-ups can turn the tide of the race in an instant, leading to feelings of unfairness and resentment when players are targeted or fall behind due to uncontrollable events.",
-  };
+  const [frontendData, setFrontendData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/get");
+        if (!res.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const data = await res.json();
+        setFrontendData(data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
-    <>
-      <div>{data.id}</div>
-      <h2>{data.title}</h2>
-      <p>{data.genre}</p>
-      <div>{data.description}</div>
-      <div>{data.difficulty}</div>
-      <div>{data.competitiveness}</div>
-      <div>{data.friendship_ruin}</div>
-    </>
+    <div>
+      <header className="header">
+        <h1>Alliance Anarchy</h1>
+        <Link to="/addData">
+        <button className="add-games">ADD +</button>
+        </Link>
+      </header>
+      <div className="container">
+        <table className="data-table"> {/* Table element */}
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Genre</th>
+              <th>Description</th>
+              <th>Difficulty</th>
+              <th>Competitiveness</th>
+              <th>Friendship Ruin</th>
+            </tr>
+          </thead>
+          <tbody>
+            {frontendData.map((item) => (
+              <tr key={item.id}>
+                <td>{item.title}</td>
+                <td>{item.genre}</td>
+                <td>{item.description}</td>
+                <td>{item.difficulty}</td>
+                <td>{item.competitiveness}</td>
+                <td>{item.friendship_ruin}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 };
 
