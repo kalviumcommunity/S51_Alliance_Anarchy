@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import axios from "axios";
-import './AddData.css'; 
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
-const AddData = () => {
-    const [id, setId] = useState("");
-    const [title, setTitle] = useState('');
+const UpdateData = () => {
+
+    const {id} = useParams()
+
+    // const [id, setId] = useState("");
+    const [title, setTitle] = useState("");
     const [genre, setGenre] = useState("");
     const [description, setDescription] = useState("");
     const [difficulty, setDifficulty] = useState("");
@@ -15,24 +18,22 @@ const AddData = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post("http://localhost:3000/post", {
-            id,
+        axios.patch(`http://localhost:3000/put/${id}`, {
             title,
+            genre,
             description,
             difficulty,
             competitiveness,
-            friendshipRuin,
-            genre
+            friendshipRuin
         })
         .then((res) => {
-            console.log("Data saved successfully:", res.data);
+            console.log("Data updated successfully:", res.data);
             clearForm();
-            alert("Data saved successfully!");
+            alert("Data updated successfully!");
         })
         .catch((err) => {
             if (err.response) {
                 console.error("Server responded with status:", err.response.status);
-                console.error("Error message from server:", err.response.data);
                 setErrorMessage(`Server responded with status: ${err.response.status}. ${err.response.data}`);
             }
         });
@@ -52,8 +53,8 @@ const AddData = () => {
     return (
         <div className="form-container"> 
             <form onSubmit={handleSubmit}>
-                <label htmlFor="id">ID:</label>
-                <input type="number" id="id" value={id} onChange={(e) => setId(e.target.value)} name="id" required /><br /><br />
+                {/* <label htmlFor="id">ID:</label>
+                <input type="number" id="id" value={id} onChange={(e) => setId(e.target.value)} name="id" required /><br /><br /> */}
                 
                 <label htmlFor="title">Title:</label>
                 <input type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)} name="title" required /><br /><br />
@@ -73,11 +74,11 @@ const AddData = () => {
                 <label htmlFor="friendship_ruin">Friendship Ruin:</label>
                 <input type="text" id="friendship_ruin" value={friendshipRuin} onChange={(e) => setFriendshipRuin(e.target.value)} name="friendship_ruin"/><br /><br />
                 
-                <button type="submit">Submit</button>
+                <button type="submit">Update</button>
             </form>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
         </div>
-    );
-};
+  )
+}
 
-export default AddData;
+export default UpdateData;

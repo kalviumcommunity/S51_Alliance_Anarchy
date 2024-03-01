@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./DummyData.css"; 
 import { Link } from "react-router-dom"
+import axios from "axios";
 
 const DummyData = () => {
   const [frontendData, setFrontendData] = useState([]);
@@ -20,6 +21,16 @@ const DummyData = () => {
     };
     fetchData();
   }, []);
+
+  const handleDelete = async (id) =>{
+      axios.delete(`http://localhost:3000/delete/${id}`)
+      .then((response)=>{
+        const deletedData = frontendData.filter(item => item.id !== id)
+        setFrontendData(deletedData)
+      }).catch((err)=>{
+        console.log("Error" , err)
+      })
+  }
 
   return (
     <div>
@@ -50,7 +61,10 @@ const DummyData = () => {
                 <td>{item.difficulty}</td>
                 <td>{item.competitiveness}</td>
                 <td>{item.friendship_ruin}</td>
+                <Link to={`/updateData/${item.id}`}><button>Edit</button></Link>
+                <button onClick={(e)=>handleDelete(item.id)}>Delete</button> 
               </tr>
+              
             ))}
           </tbody>
         </table>
