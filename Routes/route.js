@@ -16,7 +16,7 @@ deleteRoute.use(express.json());
 getRoute.get("/get", async (req, res) => {
   try {
     const games = await Games.find();
-    console.log(games)
+    // console.log(games)
     res.status(200).json(games);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch games", error: err.message });
@@ -27,10 +27,8 @@ getRoute.get("/get", async (req, res) => {
 postRoute.post("/post", async (req, res) => {
   try {
 
-    const {id, title, description, competitiveness, friendship_ruin, genre} = req.body
-    console.log(id)
-    const newGame = await Games.create({id, title, description, competitiveness, friendship_ruin, genre});
-    // console.log(newGame)
+    const {id, title, description, difficulty, competitiveness, friendship_ruin, genre} = req.body
+    const newGame = await Games.create({id, title, difficulty, description, competitiveness, friendship_ruin, genre});
 
     res.status(201).json(newGame);
   } catch (err) {
@@ -59,7 +57,7 @@ putRoute.patch("/put/:id", async (req, res) => {
 deleteRoute.delete("/delete/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedGame = await Games.findOneAndDelete({id: id});
+    const deletedGame = await Games.findOneAndDelete({ id: id});
     if (!deletedGame) {
       return res.status(404).json({ message: "Game not found" });
     }

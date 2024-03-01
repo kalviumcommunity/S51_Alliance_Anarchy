@@ -22,7 +22,7 @@ const dataSchema = new mongoose.Schema({
         type: String
     },
     friendship_ruin: {
-        type: String
+        type: String 
     }
 })
 
