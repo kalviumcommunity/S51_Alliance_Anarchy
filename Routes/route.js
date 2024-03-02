@@ -4,6 +4,17 @@ const postRoute = express.Router();
 const putRoute = express.Router();
 const deleteRoute = express.Router();
 const Games = require("../model/AllianceAnarchy.model");
+const joi = require("joi")
+
+const schema = joi.object({
+  id : joi.string(),
+  title: joi.string().required(),
+  genre: joi.string(),
+  description: joi.string(),
+  difficulty: joi.string(),
+  competitiveness: joi.string(),
+  friendship_ruin: joi.string()
+})
 
 
 // Middleware to parse JSON request bodies
@@ -23,10 +34,14 @@ getRoute.get("/get", async (req, res) => {
   }
 });
 
-// POST route to create a new game
+// POST route to create a new ga(me
 postRoute.post("/post", async (req, res) => {
   try {
 
+    const { error } = schema.validate(req.body);
+    if (error) {
+       res.json({error})
+    }
     const {id, title, description, difficulty, competitiveness, friendship_ruin, genre} = req.body
     const newGame = await Games.create({id, title, difficulty, description, competitiveness, friendship_ruin, genre});
 
