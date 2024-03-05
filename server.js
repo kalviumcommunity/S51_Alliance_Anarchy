@@ -6,6 +6,7 @@ const { getRoute, postRoute, putRoute, deleteRoute } = require("./Routes/route")
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const cookie = require("cookie-parser")
+const jwt = require("jsonwebtoken")
 
 // Middleware
 app.use(cors());
@@ -44,6 +45,12 @@ app.get("/logout", (req, res) => {
     const {userName} = req.body
     res.clearCookie('user', userName) 
     res.send("logout successful")
+})
+
+app.get("/auth", (req, res) => {
+    const {userName} = req.body
+    jwt.sign({username: userName}, process.env.SECRET_TOKEN)
+    res.json("User authenticated")
 })
 
 // Start server
