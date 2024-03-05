@@ -42,7 +42,8 @@ postRoute.post("/post", async (req, res) => {
     if (error) {
        res.json({error})
     }
-    const {id, title, description, difficulty, competitiveness, friendship_ruin, genre} = req.body
+    
+    const {userName, id, title, description, difficulty, competitiveness, friendship_ruin, genre} = req.body
     const newGame = await Games.create({id, title, difficulty, description, competitiveness, friendship_ruin, genre});
 
     res.status(201).json(newGame);
