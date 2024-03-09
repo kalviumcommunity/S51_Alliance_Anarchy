@@ -18,7 +18,7 @@ const UpdateData = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.patch(`http://localhost:3000/put/${id}`, {
+        axios.patch(`hhttps://s51-alliance-anarchy-1.onrender.com/put/${id}`, {
             title,
             genre,
             description,

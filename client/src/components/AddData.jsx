@@ -15,7 +15,7 @@ const AddData = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post("http://localhost:3000/post", {
+        axios.post("https://s51-alliance-anarchy-1.onrender.com/post", {
             id,
             title,
             description,
