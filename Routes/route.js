@@ -5,6 +5,10 @@ const putRoute = express.Router();
 const deleteRoute = express.Router();
 const Games = require("../model/AllianceAnarchy.model");
 const joi = require("joi")
+const userModel = require("../model/User.model")
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+
 
 const schema = joi.object({
   id : joi.string(),
@@ -51,6 +55,27 @@ postRoute.post("/post", async (req, res) => {
     res.status(400).json({ message: "Failed to create game", error: err.message });
   }
 });
+
+postRoute.post("/login", async(req, res) => {
+  const {username, password} = req.body
+
+  try{
+    const user = await userModel.findOne({username})
+    if (!user){
+      return res.status(401).json({error : "Invalid username or password"})
+    }
+    const isPassValid = bcrypt.compare(password, user.password)
+    if(!isPassValid) {
+      return res.status(401).json({error:"Invalid username or password"})
+    }
+    const token = jwt.sign({username: user.username}, process.env.SECRET_TOKEN)
+    res.cookie("Token", token, {httpOnly: true})
+    res.json({token, username: user.username})
+  }catch(err){
+    console.log(err)
+    res.status(500).json({error: "Something went wrong"})
+  }
+})
 
 // PATCH route to update a game by ID
 putRoute.patch("/put/:id", async (req, res) => {

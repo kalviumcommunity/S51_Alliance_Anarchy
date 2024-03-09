@@ -1,50 +1,68 @@
-/* DummyData.css */
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-}
-
 .header {
-  background-color: #2c3e50;
+  background-color: #333;
   color: #fff;
-  padding: 20px 0;
+  padding: 1rem;
   text-align: center;
 }
 
 .container {
-  margin: 20px auto;
+  margin: 2rem auto;
   max-width: 800px;
 }
 
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
+.data-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 1rem;
 }
 
-.data-table th, .data-table td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  color: black;
+.data-row {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  transition: all 0.3s ease;
 }
 
-.data-table th {
-  background-color: #34495e;
+.data-row:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.button-container button {
+  background-color: #333;
   color: #fff;
-  text-align: left;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
 }
 
-.data-table tbody tr:nth-child(even) {
-  background-color: #ecf0f1;
+.button-container button:hover {
+  background-color: #555;
 }
 
-.data-table tbody tr:hover {
-  background-color: #d5dbdb;
+.add-games,
+.logout,
+.login {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
 }
 
-.add-games {
-  background-color: #27ae60;
+.add-games:hover,
+.logout:hover,
+.login:hover {
+  background-color: #555;
+}
+
+.login {
+  background-color: #4CAF50;
   border: none;
   color: white;
   padding: 10px 20px;
@@ -52,29 +70,12 @@ body {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin-top: 20px;
+  margin: 4px 2px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
 }
 
-.add-games:hover {
-  background-color: #219a52;
-}
-
-.edit-btn, .delete-btn {
-  background-color: #e74c3c;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
-  margin-right: 5px;
-  cursor: pointer;
-  border-radius: 3px;
-}
-
-.edit-btn:hover, .delete-btn:hover {
-  background-color: #c0392b;
+.login:hover {
+  background-color: #45a049; 
 }
