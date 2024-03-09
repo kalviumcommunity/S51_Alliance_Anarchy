@@ -12,7 +12,7 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://s51-alliance-anarchy-1.onrender.com/login", { username, password });
+      const res = await axios.post("https://s51-alliance-anarchy.onrender.com/login", { username, password });
       if (res.status === 200) {
         const { token } = res.data;
         document.cookie = `token=${token}; path=/`;
