@@ -35,13 +35,26 @@ app.get("/ping", (req, res) => {
     res.send("pong");
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
     const { username, password } = req.body;
-    if (username === "admin" && password === "admin123") {
-        const token = jwt.sign({ username }, process.env.SECRET_TOKEN);
-        res.json({ token });
-    } else {
-        res.status(401).json({ error: "Invalid credentials" });
+    try {
+        // Assuming you have a user model with username and password fields
+        const user = await userModel.findOne({ username });
+        if (!user) {
+            return res.status(401).json({ error: "Invalid username or password" });
+        }
+        // Compare passwords using bcrypt
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ error: "Invalid username or password" });
+        }
+        // Generate JWT token
+        const token = jwt.sign({ username: user.username }, process.env.SECRET_TOKEN);
+        res.cookie("token", token, { httpOnly: true });
+        res.json({ token, username: user.username });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Something went wrong" });
     }
 });
 
