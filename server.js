@@ -35,23 +35,15 @@ app.get("/ping", (req, res) => {
     res.send("pong");
 });
 
-app.get("/login", (req, res) => {
-    const {userName} = req.body
-    res.cookie('user', userName)
-    res.send("login successful")
-})
-
-app.get("/logout", (req, res) => {
-    const {userName} = req.body
-    res.clearCookie('user', userName) 
-    res.send("logout successful")
-})
-
-app.get("/auth", (req, res) => {
-    const {userName} = req.body
-    jwt.sign({username: userName}, process.env.SECRET_TOKEN)
-    res.json("User authenticated")
-})
+app.post("/login", (req, res) => {
+    const { username, password } = req.body;
+    if (username === "admin" && password === "admin123") {
+        const token = jwt.sign({ username }, process.env.SECRET_TOKEN);
+        res.json({ token });
+    } else {
+        res.status(401).json({ error: "Invalid credentials" });
+    }
+});
 
 // Start server
 app.listen(port, () => {

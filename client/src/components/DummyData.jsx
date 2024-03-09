@@ -1,40 +1,55 @@
 import React, { useState, useEffect } from "react";
 import "./DummyData.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
 const DummyData = () => {
   const [frontendData, setFrontendData] = useState([]);
   const [selectedDifficulty, setSelectedDifficulty] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("http://localhost:3000/get");
-        if (!res.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const data = await res.json();
-        setFrontendData(data);
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
     fetchData();
+    loginStatus();
   }, []);
 
+  const fetchData = async () => {
+    try {
+      const res = await axios.get("https://s51-alliance-anarchy-1.onrender.com/get");
+      setFrontendData(res.data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const loginStatus = () => {
+    const token = getCookie("token");
+    setIsLoggedIn(!!token);
+  };
+
+  const logout = () => {
+    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    setIsLoggedIn(false);
+    window.location.reload();
+  };
+
+  const getCookie = (name) => {
+    const value = document.cookie;
+    const parts = value.split(`${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+  };
+
   const handleDelete = async (id) => {
-    axios
-      .delete(`http://localhost:3000/delete/${id}`)
-      .then((response) => {
-        const deletedData = frontendData.filter((item) => item.id !== id);
-        alert("Are you sure you");
-        setFrontendData(deletedData);
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
+    try {
+      await axios.delete(`http://localhost:3000/delete/${id}`);
+      const deletedData = frontendData.filter((item) => item.id !== id);
+      setFrontendData(deletedData);
+      alert("Item deleted successfully.");
+    } catch (err) {
+      console.log("Error", err);
+      alert("Failed to delete item.");
+    }
   };
 
   const handleEdit = (id) => {
@@ -45,21 +60,32 @@ const DummyData = () => {
     setSelectedDifficulty(e.target.value);
   };
 
-  const filteredData = selectedDifficulty
-    ? frontendData.filter((item) => item.difficulty === selectedDifficulty)
-    : frontendData;
-
   const difficultyOptions = Array.from(
     new Set(frontendData.map((item) => item.difficulty))
   );
+
+  const filteredData = selectedDifficulty
+    ? frontendData.filter((item) => item.difficulty === selectedDifficulty)
+    : frontendData;
 
   return (
     <div>
       <header className="header">
         <h1>Alliance Anarchy</h1>
-        <button className="add-games" onClick={() => navigate("/addData")}>
-          ADD +
-        </button>
+        {isLoggedIn && (
+          <button className="add-games" onClick={() => navigate("/addData")}>
+            ADD +
+          </button>
+        )}
+        {isLoggedIn ? (
+          <button className="logout" onClick={logout}>
+            Logout
+          </button>
+        ) : (
+          <Link to="/login">
+            <button className="login">Login</button>
+          </Link>
+        )}
       </header>
       <div className="container">
         <label htmlFor="difficultyFilter">Filter by Difficulty:</label>
@@ -75,38 +101,24 @@ const DummyData = () => {
             </option>
           ))}
         </select>
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Genre</th>
-              <th>Description</th>
-              <th>Difficulty</th>
-              <th>Competitiveness</th>
-              <th>Friendship Ruin</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.map((item) => (
-              <tr key={item.id}>
-                <td>{item.title}</td>
-                <td>{item.genre}</td>
-                <td>{item.description}</td>
-                <td>{item.difficulty}</td>
-                <td>{item.competitiveness}</td>
-                <td>{item.friendship_ruin}</td>
-                <td>
+        <div className="data-container">
+          {filteredData.map((item) => (
+            <div key={item.id} className="data-row">
+              <div><h1>Title: {item.title}</h1></div>
+              <div>Genre: {item.genre}</div>
+              <div>Description: {item.description}</div>
+              <div>Difficulty: {item.difficulty}</div>
+              <div>Competitiveness: {item.competitiveness}</div>
+              <div>Friendship Ruin: {item.friendship_ruin}</div>
+              {isLoggedIn && (
+                <div className="button-container">
                   <button onClick={() => handleEdit(item.id)}>Edit</button>
-                </td>
-                <td>
                   <button onClick={() => handleDelete(item.id)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
