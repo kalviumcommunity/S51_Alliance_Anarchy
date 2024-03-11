@@ -18,7 +18,7 @@ const UpdateData = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.patch(`hhttps://s51-alliance-anarchy-1.onrender.com/put/${id}`, {
+        axios.patch(`https://s51-alliance-anarchy-1.onrender.com/put/${id}`, {
             title,
             genre,
             description,
@@ -28,8 +28,9 @@ const UpdateData = () => {
         })
         .then((res) => {
             console.log("Data updated successfully:", res.data);
-            clearForm();
             alert("Data updated successfully!");
+            clearForm();
+            
         })
         .catch((err) => {
             if (err.response) {
