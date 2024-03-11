@@ -72,6 +72,7 @@ const DummyData = () => {
     <div>
       <header className="header">
         <h1>Alliance Anarchy</h1>
+        <div className="options">
         {isLoggedIn && (
           <button className="add-games" onClick={() => navigate("/addData")}>
             ADD +
@@ -86,6 +87,7 @@ const DummyData = () => {
             <button className="login">Login</button>
           </Link>
         )}
+        </div>
       </header>
       <div className="container">
         <label htmlFor="difficultyFilter">Filter by Difficulty:</label>
