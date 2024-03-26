@@ -9,4 +9,4 @@
 ---
 <a href='https://alliance-anarchy-lxsw.onrender.com/'>Deployed link</a>
 
-<h3>FrontEnd Page: <a href="https://s51-alliance-anarchyy.netlify.app/">Link</a></h3>
+<h3>FrontEnd Page: <a href="https://6602471274004e906ec7fce5--charming-biscuit-f09126.netlify.app/">Link</a></h3>
